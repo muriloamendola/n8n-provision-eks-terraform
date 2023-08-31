@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "aws_profile" {
   description = "Defines which profile credential inside $HOME/.aws/credentials terraform must use to connect to AWS account"
   type = string
-  default = "default"  
+  default = "personal"  
 }
 
 variable "environment" {

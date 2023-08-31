@@ -15,17 +15,17 @@ case $1 in
         ;;
     "plan")
         terraform init
-        terraform plan
+        terraform plan -out out.tfplan 
         ;;
     "apply")
         terraform init
-        terraform plan
-        terraform apply -auto-approve
+        terraform plan -out apply.tfplan 
+        terraform apply -auto-approve apply.tfplan 
         ;;
     "destroy")
         terraform init
-        terraform plan -destroy
-        terraform destroy -auto-approve
+        terraform plan -destroy -out destroy.tfplan 
+        terraform apply -auto-approve destroy.tfplan 
         ;;
     *)
         echo "Invalid command. available commands: init, plan, apply, destroy."

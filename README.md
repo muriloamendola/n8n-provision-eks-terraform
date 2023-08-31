@@ -27,8 +27,8 @@ After install Terraform CLI and clone this repository, go to the folder terrafor
 
 ```
 terraform init
-terraform plan -out out.tfplan 
-terraform apply -auto-approve out.tfplan 
+terraform plan -out apply.tfplan 
+terraform apply -auto-approve apply.tfplan 
 ```
 
 If the commands work like expected you will see successful messages, such as the shown in the pictures below.
@@ -37,7 +37,7 @@ If the commands work like expected you will see successful messages, such as the
 
 ![terraform apply success](./docs/apply_finished.png)
 
-### Using Docker containers
+### [WIP] Using Docker containers 
 
 If you wouldn't like to install Terraform CLI in your machine you can run using docker containers using the following commands.
 
@@ -46,14 +46,8 @@ Building container image
 docker build --rm --tag muriloamendola/terraform-n8n:0.1 .
 ```
 
-terraform apply
 ```
 docker run --name tf-n8n muriloamendola/terraform-n8n:0.1 apply
-```
-
-terraform destroy
-```
-docker run --name tf-n8n muriloamendola/terraform-n8n:0.1 destroy
 ```
 
 ## Configure kubectl
@@ -69,6 +63,16 @@ aws eks --region $(region) update-kubeconfig --name $(cluster_name)
 > Note that I don't use aws `default` profile. For this reason I must specify the profile name using variable `AWS_PROFILE` before the command
 
 ![kubctl config](./docs/kubectl_config.png)
+
+## Destroy
+
+The destroy process can be done in two ways, using the command `terraform destroy` or making a destroy plan and then running apply command, as we can see below:
+
+```
+terraform init
+terraform plan -destroy -out destroy.tfplan 
+terraform apply -auto-approve destroy.tfplan
+```
 
 ## Jobs to be done
 
