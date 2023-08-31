@@ -27,9 +27,15 @@ After install Terraform CLI and clone this repository, go to the folder terrafor
 
 ```
 terraform init
-terraform plan
-terraform apply -auto-approve
+terraform plan -out out.tfplan 
+terraform apply -auto-approve out.tfplan 
 ```
+
+If the commands work like expected you will see successful messages, such as the shown in the pictures below.
+
+![terraform plan success](./docs/plan_finished.png)
+
+![terraform apply success](./docs/apply_finished.png)
 
 ### Using Docker containers
 
@@ -57,9 +63,12 @@ After apply the configuration files you can configure `kubectl` to execute comma
 To do this, run the command below replacing `region`` and `cluster_name` with the correct values
 
 ```
-aws eks --region $(region) update-kubeconfig \
-    --name $(cluster_name)
+aws eks --region $(region) update-kubeconfig --name $(cluster_name)
 ```
+
+> Note that I don't use aws `default` profile. For this reason I must specify the profile name using variable `AWS_PROFILE` before the command
+
+![kubctl config](./docs/kubectl_config.png)
 
 ## Jobs to be done
 
