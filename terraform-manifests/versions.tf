@@ -17,6 +17,17 @@ terraform {
       source = "hashicorp/cloudinit"
       version = "~> 2.3.2"
     }
+
+    # To deploy Services, Deployments and other resources to kubernetes
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "~> 2.23.0"
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+      version = "2.11.0"
+    }
   }
 
   # Not recommended for production environment. See https://developer.hashicorp.com/terraform/language/state/remote
@@ -25,8 +36,17 @@ terraform {
   }
 }
 
-# Provider Block
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
+}
+
+provider "kubernetes" {
+  config_path = var.kubernetes_config_path
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = var.kubernetes_config_path
+  }
 }

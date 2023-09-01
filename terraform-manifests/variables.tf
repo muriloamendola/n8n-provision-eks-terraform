@@ -10,6 +10,12 @@ variable "aws_profile" {
   default = "personal"  
 }
 
+variable "kubernetes_config_path" {
+  description = "Path to kubeconfig file which will be used to connect to EKS Cluster"
+  type = string
+  default = "~/.kube/config"
+}
+
 variable "environment" {
   description = "Environment Variable used as a prefix for resources name"
   type = string
