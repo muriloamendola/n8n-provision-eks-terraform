@@ -77,5 +77,6 @@ terraform apply -auto-approve destroy.tfplan
 ## Jobs to be done
 
 - Configure RDS Postgres instance to be used by n8n;
-- Create n8n manifests files to run over Kubernetes;
+- Use AWS KMS to handle secrets;
 - Handle eks logs using CloudWatch;
+- Better arrange the project structure using Terraform modules;
