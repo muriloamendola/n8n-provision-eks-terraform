@@ -3,10 +3,10 @@ resource "kubernetes_deployment" "n8n_deployment" {
   depends_on = [ module.eks, kubernetes_persistent_volume_claim.n8n_claim0 ]
 
   metadata {
-    name = "n8n"
+    name = var.n8n_deployment_and_service_name
     namespace = kubernetes_namespace.environment_namespace.metadata.0.name
     labels = {
-      app = "n8n"
+      app = var.n8n_deployment_and_service_name
     }
   }
 
@@ -15,7 +15,7 @@ resource "kubernetes_deployment" "n8n_deployment" {
 
     selector {
       match_labels = {
-        app = "n8n"
+        app = var.n8n_deployment_and_service_name
       }
     }
 
@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "n8n_deployment" {
     template {
       metadata {
         labels = {
-          app = "n8n"
+          app = var.n8n_deployment_and_service_name
         }
       }
 
@@ -36,7 +36,7 @@ resource "kubernetes_deployment" "n8n_deployment" {
           image = "busybox:1.36"
           command = [ "sh", "-c", "chown 1000:1000 /data" ]
           volume_mount {
-            name = "n8n-claim0"
+            name = var.claim0_persistent_volume_name
             mount_path = "/data"
           }
         }
@@ -44,15 +44,15 @@ resource "kubernetes_deployment" "n8n_deployment" {
         restart_policy = "Always"
         
         volume {
-          name = "n8n-claim0"
+          name = var.claim0_persistent_volume_name
           persistent_volume_claim {
-            claim_name = "n8n-claim0"
+            claim_name = var.claim0_persistent_volume_name
           }
         }
 
         container {
           image = "n8nio/n8n"
-          name = "n8n"
+          name = var.n8n_deployment_and_service_name
           command = [ "/bin/sh", "-c", "sleep 5; n8n start" ]
           port {
             container_port = 5678
@@ -66,7 +66,7 @@ resource "kubernetes_deployment" "n8n_deployment" {
             }
           }
           volume_mount {
-            name = "n8n-claim0"
+            name = var.claim0_persistent_volume_name
             mount_path = "/home/node/.n8n"
           }
           
@@ -96,11 +96,11 @@ resource "kubernetes_deployment" "n8n_deployment" {
           }
           env {
             name = "N8N_PROTOCOL"
-            value = "http"
+            value = var.n8n_protocol
           } 
           env {
             name = "N8N_PORT"
-            value = "5678"
+            value = var.n8n_port
           } 
         }
       }

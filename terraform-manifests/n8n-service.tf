@@ -2,21 +2,21 @@ resource "kubernetes_service" "n8n_service" {
   depends_on = [ module.eks ]
 
   metadata {
-    name      = "n8n"
+    name = var.n8n_deployment_and_service_name
     namespace = kubernetes_namespace.environment_namespace.metadata.0.name
     labels = {
-      app = "n8n"
+      app = var.n8n_deployment_and_service_name
     }
   }
   spec {
     selector = {
-      app = "n8n"
+      app = var.n8n_deployment_and_service_name
     }
     port {
-      name        = "5678"
-      port        = 5678
+      name        = var.n8n_port
+      port        = var.n8n_port
       protocol    = "TCP"
-      target_port = 5678
+      target_port = var.n8n_port
     }
   }
 }
