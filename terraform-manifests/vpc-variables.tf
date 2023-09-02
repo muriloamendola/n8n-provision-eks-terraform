@@ -48,6 +48,12 @@ variable "vpc_create_database_subnet_route_table" {
   default     = true
 }
 
+variable "vpc_create_database_internet_gateway_route" {
+  description = "Controls if an internet gateway route for public database access should be created"
+  type        = bool
+  default     = true
+}
+
 # VPC Enable NAT Gateway (True or False) 
 variable "vpc_enable_nat_gateway" {
   description = "Enable NAT Gateways for Private Subnets Outbound Communication"

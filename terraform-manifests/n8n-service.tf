@@ -9,6 +9,7 @@ resource "kubernetes_service" "n8n_service" {
     }
   }
   spec {
+    type = "LoadBalancer"
     selector = {
       app = var.n8n_deployment_and_service_name
     }

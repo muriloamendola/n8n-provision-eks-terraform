@@ -22,6 +22,12 @@ variable "rds_intance_class" {
   default     = "db.t4g.micro"
 }
 
+variable "rds_publicly_accessible" {
+  description = "Bool to control if instance is publicly accessible"
+  type        = bool
+  default     = true
+}
+
 variable "rds_port" {
   description = "Port that will be exposed and allow access to database"
   type        = number
@@ -43,7 +49,7 @@ variable "postgres_username" {
 variable "postgres_password" {
   description = "Master db user password"
   type        = string
-  default     = "admin"
+  default     = "n8nadmin"
 }
 
 variable "allocated_storage" {

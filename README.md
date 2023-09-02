@@ -56,6 +56,10 @@ aws eks --region $(region) update-kubeconfig --name $(cluster_name)
 
 ![kubctl config](./docs/kubectl_config.png)
 
+After resources have been created you can access n8n using the Load Balancer url associated to `n8n-service` with the port 5678.
+
+![n8n workflow ui](./docs/n8n_workflow_ui.png)
+
 ## Destroy
 
 The destroy process can be done in two ways, using the command `terraform destroy` or making a destroy plan and then running apply command, as we can see below:

@@ -11,9 +11,10 @@ module "vpc" {
   private_subnets = var.vpc_private_subnets
 
   # Database Subnets
-  database_subnets                   = var.vpc_database_subnets
-  create_database_subnet_group       = var.vpc_create_database_subnet_group
-  create_database_subnet_route_table = var.vpc_create_database_subnet_route_table
+  database_subnets                       = var.vpc_database_subnets
+  create_database_subnet_group           = var.vpc_create_database_subnet_group
+  create_database_subnet_route_table     = var.vpc_create_database_subnet_route_table
+  create_database_internet_gateway_route = var.vpc_create_database_internet_gateway_route
 
   # NAT Gateways - Outbound Communication
   enable_nat_gateway = var.vpc_enable_nat_gateway

@@ -76,7 +76,7 @@ resource "kubernetes_deployment" "n8n_deployment" {
           }
           env {
             name  = "DB_POSTGRESDB_HOST"
-            value = module.rds.db_instance_endpoint
+            value = module.rds.db_instance_address
           }
           env {
             name  = "DB_POSTGRESDB_PORT"
