@@ -17,11 +17,10 @@ module "rds" {
   password = var.postgres_password # Do not use this approach in production environment
   port     = var.rds_port
 
-  multi_az             = true
-
-  create_db_subnet_group = false
-  db_subnet_group_name = module.vpc.database_subnet_group
-  subnet_ids = module.vpc.database_subnets
+  multi_az               = true
+  db_subnet_group_name   = module.vpc.database_subnet_group
+  subnet_ids             = module.vpc.database_subnets
+  vpc_security_group_ids = [module.rds_sg.security_group_id]
 
   tags = local.common_tags
 }
