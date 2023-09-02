@@ -1,8 +1,8 @@
 resource "kubernetes_persistent_volume_claim" "n8n_claim0" {
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 
   metadata {
-    name = var.claim0_persistent_volume_name
+    name      = var.claim0_persistent_volume_name
     namespace = kubernetes_namespace.environment_namespace.metadata.0.name
 
     labels = {

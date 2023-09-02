@@ -35,3 +35,13 @@ output "azs" {
   description = "A list of availability zones spefified as argument to this module"
   value       = module.vpc.azs
 }
+
+output "database_subnet_group" {
+  description = "ID of database subnet group"
+  value       = module.vpc.database_subnet_group
+}
+
+output "database_subnets" {
+  description = "List of IDs of database subnets"
+  value       = module.vpc.database_subnets
+}

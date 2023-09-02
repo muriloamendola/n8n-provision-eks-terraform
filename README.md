@@ -7,14 +7,16 @@ The main challenge here is to create an IaC using Terraform, to provide a EKS cl
 The draft below ilustrates our project infrastructure and the modules and resource we must create using Terraform.
 ![Sample infrastructure we must create to provision n8n over EKS cluster.](./docs/project_infrastructure.png "Sample infrastructure we must create to provision n8n over EKS cluster.")
 
-Looking to this image its clear that we have to create a VPC, and build our EKS cluster over private subnets. So we will need to use NAT Gateways and Internet Gateway to handle inbound and outbound traffic to our nodes.
+Looking to this image its clear that we have to create a VPC, and build our EKS cluster over private subnets. So we will need to use NAT Gateways and Internet Gateway to handle inbound and outbound traffic to our nodes. The tool n8n will be configured using postgres as database, so we will have to create a postgres intance using RDS.
 
-Inside the folder `terraform-manifests` are all the .tf files to build our VPC, EKS and other resources.
+Inside the folder `terraform-manifests` are all the .tf files to build our VPC, EKS, RDS and also deployment and service for n8n.
+
+> As I've said before, this project is not production ready and for this reason, we are not handle database credentials in a right way (usgin KMS for example)
 
 ## Tips
 
 - I'm using VS Code as my IDE and installed HashiCorp Terraform plugin that help us with auto complete suggestions;
-- To run terraform command in your machine you must install [Terraform CLI](https://developer.hashicorp.com/terraform/cli) or following the steps to run the project using docker containers;
+- To run terraform command in your machine you must install [Terraform CLI](https://developer.hashicorp.com/terraform/cli);
 - As we are using AWS as cloud provider its necessary to have an AWS account and [configured credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) with administrator privilege to create and manage resources;
 
 ## Running
@@ -37,24 +39,14 @@ If the commands work like expected you will see successful messages, such as the
 
 ![terraform apply success](./docs/apply_finished.png)
 
-### [WIP] Using Docker containers 
-
-If you wouldn't like to install Terraform CLI in your machine you can run using docker containers using the following commands.
-
-Building container image
-```
-docker build --rm --tag muriloamendola/terraform-n8n:0.1 .
-```
-
-```
-docker run --name tf-n8n muriloamendola/terraform-n8n:0.1 apply
-```
+And you can see the pod for n8n running.
+![n8n pod running](./docs/n8n_pod_running.png)
 
 ## Configure kubectl
 
 After apply the configuration files you can configure `kubectl` to execute commands in your EKS Cluster.
 
-To do this, run the command below replacing `region`` and `cluster_name` with the correct values
+To do this, run the command below replacing `region` and `cluster_name` with the correct values
 
 ```
 aws eks --region $(region) update-kubeconfig --name $(cluster_name)
@@ -76,7 +68,8 @@ terraform apply -auto-approve destroy.tfplan
 
 ## Jobs to be done
 
-- Configure RDS Postgres instance to be used by n8n;
 - Use AWS KMS to handle secrets;
+- Configure backend to store terraform remote state in a S3 bucket;
+- Use custom domain;
 - Handle eks logs using CloudWatch;
 - Better arrange the project structure using Terraform modules;

@@ -14,19 +14,14 @@ terraform {
     }
 
     cloudinit = {
-      source = "hashicorp/cloudinit"
+      source  = "hashicorp/cloudinit"
       version = "~> 2.3.2"
     }
 
     # To deploy Services, Deployments and other resources to kubernetes
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = "~> 2.23.0"
-    }
-
-    helm = {
-      source = "hashicorp/helm"
-      version = "2.11.0"
     }
   }
 
@@ -41,12 +36,14 @@ provider "aws" {
   profile = var.aws_profile
 }
 
+# Kubernetes provider configuration 
 provider "kubernetes" {
-  config_path = var.kubernetes_config_path
-}
-
-provider "helm" {
-  kubernetes {
-    config_path = var.kubernetes_config_path
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args        = ["eks", "get-token", "--profile", var.aws_profile, "--cluster-name", module.eks.cluster_name]
+    command     = "aws"
   }
 }
+

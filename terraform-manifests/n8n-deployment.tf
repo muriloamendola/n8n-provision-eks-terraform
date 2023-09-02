@@ -1,9 +1,9 @@
 resource "kubernetes_deployment" "n8n_deployment" {
 
-  depends_on = [ module.eks, kubernetes_persistent_volume_claim.n8n_claim0 ]
+  depends_on = [module.eks, module.rds]
 
   metadata {
-    name = var.n8n_deployment_and_service_name
+    name      = var.n8n_deployment_and_service_name
     namespace = kubernetes_namespace.environment_namespace.metadata.0.name
     labels = {
       app = var.n8n_deployment_and_service_name
@@ -32,17 +32,17 @@ resource "kubernetes_deployment" "n8n_deployment" {
 
       spec {
         init_container {
-          name = "volume-permissions"
-          image = "busybox:1.36"
-          command = [ "sh", "-c", "chown 1000:1000 /data" ]
+          name    = "volume-permissions"
+          image   = "busybox:1.36"
+          command = ["sh", "-c", "chown 1000:1000 /data"]
           volume_mount {
-            name = var.claim0_persistent_volume_name
+            name       = var.claim0_persistent_volume_name
             mount_path = "/data"
           }
         }
 
         restart_policy = "Always"
-        
+
         volume {
           name = var.claim0_persistent_volume_name
           persistent_volume_claim {
@@ -51,9 +51,9 @@ resource "kubernetes_deployment" "n8n_deployment" {
         }
 
         container {
-          image = "n8nio/n8n"
-          name = var.n8n_deployment_and_service_name
-          command = [ "/bin/sh", "-c", "sleep 5; n8n start" ]
+          image   = "n8nio/n8n"
+          name    = var.n8n_deployment_and_service_name
+          command = ["/bin/sh", "-c", "sleep 5; n8n start"]
           port {
             container_port = 5678
           }
@@ -66,42 +66,42 @@ resource "kubernetes_deployment" "n8n_deployment" {
             }
           }
           volume_mount {
-            name = var.claim0_persistent_volume_name
+            name       = var.claim0_persistent_volume_name
             mount_path = "/home/node/.n8n"
           }
-          
+
           env {
-            name = "DB_TYPE"
+            name  = "DB_TYPE"
             value = "postgresdb"
           }
           env {
-            name = "DB_POSTGRESDB_HOST"
-            value = ""
+            name  = "DB_POSTGRESDB_HOST"
+            value = module.rds.db_instance_endpoint
           }
           env {
-            name = "DB_POSTGRESDB_PORT"
-            value = "5432"
+            name  = "DB_POSTGRESDB_PORT"
+            value = var.rds_port
           }
           env {
-            name = "DB_POSTGRESDB_DATABASE"
-            value = "n8n"
+            name  = "DB_POSTGRESDB_DATABASE"
+            value = var.postgres_database
           }
           env {
-            name = "DB_POSTGRESDB_USER"
-            value = "admin"
+            name  = "DB_POSTGRESDB_USER"
+            value = var.postgres_username
           }
           env {
-            name = "DB_POSTGRESDB_PASSWORD"
-            value = "admin"
+            name  = "DB_POSTGRESDB_PASSWORD"
+            value = var.postgres_password
           }
           env {
-            name = "N8N_PROTOCOL"
+            name  = "N8N_PROTOCOL"
             value = var.n8n_protocol
-          } 
+          }
           env {
-            name = "N8N_PORT"
+            name  = "N8N_PORT"
             value = var.n8n_port
-          } 
+          }
         }
       }
     }
