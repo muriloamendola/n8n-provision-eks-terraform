@@ -16,8 +16,34 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "business_divsion" {
+variable "business_division" {
   description = "Define who is the owner of the resources. It is useful for split billing and organizing resources"
   type        = string
   default     = "technology"
+}
+
+# Database settings 
+variable "postgres_database" {
+  description = "The database name that will be created"
+  type        = string
+  default     = "n8n"
+}
+
+variable "postgres_username" {
+  description = "Master db user username"
+  type        = string
+  default     = "n8n_administrator"
+}
+
+variable "postgres_password" {
+  description = "Master db user password"
+  type        = string
+  default     = "n8nadmin"
+}
+
+# EKS settings
+variable "cluster_endpoint_public_access" {
+  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
+  type        = bool
+  default     = true
 }

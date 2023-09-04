@@ -1,10 +1,7 @@
 resource "kubernetes_deployment" "n8n_deployment" {
-
-  depends_on = [module.eks, module.rds]
-
   metadata {
     name      = var.n8n_deployment_and_service_name
-    namespace = kubernetes_namespace.environment_namespace.metadata.0.name
+    namespace = var.namespace
     labels = {
       app = var.n8n_deployment_and_service_name
     }
@@ -76,11 +73,11 @@ resource "kubernetes_deployment" "n8n_deployment" {
           }
           env {
             name  = "DB_POSTGRESDB_HOST"
-            value = module.rds.db_instance_address
+            value = var.postgres_host
           }
           env {
             name  = "DB_POSTGRESDB_PORT"
-            value = var.rds_port
+            value = var.postgres_port
           }
           env {
             name  = "DB_POSTGRESDB_DATABASE"

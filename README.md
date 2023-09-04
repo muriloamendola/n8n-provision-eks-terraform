@@ -9,8 +9,6 @@ The draft below ilustrates our project infrastructure and the modules and resour
 
 Looking to this image its clear that we have to create a VPC, and build our EKS cluster over private subnets. So we will need to use NAT Gateways and Internet Gateway to handle inbound and outbound traffic to our nodes. The tool n8n will be configured using postgres as database, so we will have to create a postgres intance using RDS.
 
-Inside the folder `terraform-manifests` are all the .tf files to build our VPC, EKS, RDS and also deployment and service for n8n.
-
 > As I've said before, this project is not production ready and for this reason, we are not handle database credentials in a right way (usgin KMS for example)
 
 ## Tips
@@ -18,6 +16,18 @@ Inside the folder `terraform-manifests` are all the .tf files to build our VPC, 
 - I'm using VS Code as my IDE and installed HashiCorp Terraform plugin that help us with auto complete suggestions;
 - To run terraform command in your machine you must install [Terraform CLI](https://developer.hashicorp.com/terraform/cli);
 - As we are using AWS as cloud provider its necessary to have an AWS account and [configured credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) with administrator privilege to create and manage resources;
+
+## Project Structure
+
+Inside the folder `src` are all the .tf files to build our VPC, EKS, RDS and also deployment and service for n8n.
+
+I've tried to follow some best practices to organize complex terraform projects using modules. Basically, I divided the project in 3 main folders: 
+
+- environments: Where I can configure main.tf for each environment. At this case I just use `dev` environment;
+- modules: Where I created reusable modules;
+- applications: Applications that I intend to run under Kubernetes;
+
+> Note that using this structure we need to run `terraform` commands for each environment folder. So if I intend to apply dev environemnt changes, I need to run terraform init, plan and apply commands inside the folder `./environments/dev/`.
 
 ## Running
 
@@ -76,4 +86,3 @@ terraform apply -auto-approve destroy.tfplan
 - Configure backend to store terraform remote state in a S3 bucket;
 - Use custom domain;
 - Handle eks logs using CloudWatch;
-- Better arrange the project structure using Terraform modules;

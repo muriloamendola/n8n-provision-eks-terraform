@@ -1,15 +1,13 @@
 resource "kubernetes_service" "n8n_service" {
-  depends_on = [module.eks]
-
   metadata {
     name      = var.n8n_deployment_and_service_name
-    namespace = kubernetes_namespace.environment_namespace.metadata.0.name
+    namespace = var.namespace
     labels = {
       app = var.n8n_deployment_and_service_name
     }
   }
   spec {
-    type = "LoadBalancer"
+    type = var.service_spec_type
     selector = {
       app = var.n8n_deployment_and_service_name
     }

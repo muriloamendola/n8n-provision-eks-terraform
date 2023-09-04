@@ -1,4 +1,3 @@
-# Terraform Block
 terraform {
   required_version = "~> 1.5.5" # which means any version equal & above 1.5.5 and < 1.6.0
 
@@ -30,20 +29,3 @@ terraform {
     path = ".state/terraform.tfstate"
   }
 }
-
-provider "aws" {
-  region  = var.aws_region
-  profile = var.aws_profile
-}
-
-# Kubernetes provider configuration 
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--profile", var.aws_profile, "--cluster-name", module.eks.cluster_name]
-    command     = "aws"
-  }
-}
-
